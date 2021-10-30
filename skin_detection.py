@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from numpy.core.numeric import allclose
 import pandas as pd
 from sklearn.cluster import KMeans
 
@@ -99,19 +100,22 @@ kmeans.fit(dframe)
 dframe['cluster'] = kmeans.labels_
 print(dframe)
 km_cc = kmeans.cluster_centers_
-# for row in km_cc:
-#     if row[-1] == max(km_cc[:, -1]):
-#         skin_cluster = list(km_cc).index(row.all())
 skin_cluster_row = km_cc[km_cc[:, -1] == max(km_cc[:, -1]), :]
-skin_cluster = [np.array_equal(
-    row, skin_cluster_row) for row in km_cc]
+skin_cluster = np.where([np.allclose(row, skin_cluster_row)
+                        for row in km_cc])[0][0]
 
 
+print(km_cc)
 print(skin_cluster_row)
 print(skin_cluster)
-# for i in range(height):
-#     for j in range(width):
-#         img_BGR(i, j) =
+for i in range(height):
+    for j in range(width):
+        # This conditional is taking almost eternity for this loops to process
+        if (not dframe.loc[(dframe['Y'] == i) & (dframe['X'] == j)]['cluster'].values[0] == skin_cluster):
+            img_BGR[i, j] = [0, 0, 0]
+
+display_image(img_BGR, "final segmentation")
+# print(dframe.loc[(dframe['Y'] == 0) & (dframe['X'] == 0)]['cluster'].values[0])
 
 # for i in range (height):
 #     for j in range (width):
@@ -124,7 +128,6 @@ print(skin_cluster)
 #             img_BGR[i, j] = [0, 0, 0]
 
 # display_image(img_face_only, "final segmentation")
-# display_image(img_BGR, "final segmentation")
 
 # determine mean skin tone estimate
 # skin_tone_estimate_BGR = [np.mean(blue), np.mean(green), np.mean(red)]
