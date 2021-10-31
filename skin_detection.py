@@ -38,7 +38,7 @@ def segment_otsu(image_grayscale, img_BGR):
 
 
 # read in image into openCV BGR and grayscale
-image_path = "images\cover2.jpg"
+image_path = "images\Optimized-DynamicRange_SamsungGalaxyS10Plus.jpg"
 
 img_BGR = cv2.imread(image_path, 3)
 display_image(img_BGR, "BGR")
@@ -79,6 +79,7 @@ yx_coords = np.column_stack(np.where(gray >= 0))
 
 dframe = pd.DataFrame(img_HSV.reshape([-1, 3])[:, 0], columns=['H'])
 
+# dframe['YX'] = tuple(yx_coords[:])
 dframe['Y'] = yx_coords[:, 0]
 dframe['X'] = yx_coords[:, 1]
 
@@ -87,6 +88,7 @@ dframe['Cb'] = img_YCrCb.reshape([-1, 3])[:, 2]
 
 dframe['I'] = img_grayscale.reshape([1, img_grayscale.size])[0]
 
+print(dframe)
 
 kmeans = KMeans(
     init="random",
@@ -98,24 +100,25 @@ kmeans = KMeans(
 kmeans.fit(dframe)
 
 dframe['cluster'] = kmeans.labels_
-print(dframe)
 km_cc = kmeans.cluster_centers_
 skin_cluster_row = km_cc[km_cc[:, -1] == max(km_cc[:, -1]), :]
-skin_cluster = np.where([np.allclose(row, skin_cluster_row)
-                        for row in km_cc])[0][0]
+skin_cluster_label = np.where(
+    [np.allclose(row, skin_cluster_row) for row in km_cc])[0][0]
 
+cluster_label_mat = dframe['cluster'].values.reshape(height, width)
 
 print(km_cc)
 print(skin_cluster_row)
-print(skin_cluster)
+print(skin_cluster_label)
+print(cluster_label_mat)
 for i in range(height):
     for j in range(width):
         # This conditional is taking almost eternity for this loops to process
-        if (not dframe.loc[(dframe['Y'] == i) & (dframe['X'] == j)]['cluster'].values[0] == skin_cluster):
+        if (cluster_label_mat[i, j] != skin_cluster_label):
             img_BGR[i, j] = [0, 0, 0]
 
 display_image(img_BGR, "final segmentation")
-# print(dframe.loc[(dframe['Y'] == 0) & (dframe['X'] == 0)]['cluster'].values[0])
+# not dframe.loc[(dframe['Y'] == i) & (dframe['X'] == j)]['cluster'].values[0] == skin_cluster_label
 
 # for i in range (height):
 #     for j in range (width):
