@@ -1,6 +1,7 @@
 # Make sure that you have selenium python and chrome webdriver installed
 # Author : Gaurav Bhattacharjee
 
+from pandas.core.arrays import categorical
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -14,18 +15,20 @@ driver = webdriver.Chrome(executable_path = chrome_path)
 # Categories
 categories = ['face-moisturisers', 'cleanser', 'sunscreen', 'concealer', 'mask-and-peel', 'foundation']
 
+
 # Specify the number of products from each category
 products_from_each_category = 300
 
 # Each page has 50 products
-pages = products_from_each_category/50
+pages = products_from_each_category//50
 
 
 df = pd.DataFrame(columns=['label', 'url'])
 
 base_url = 'https://www.myntra.com/'
 for category in categories:
-    for i in range(1, pages+1):
+    i = 1
+    while i <= pages:
         try:
             driver.get(f"{base_url}{category}?p={i}")
 
@@ -44,12 +47,14 @@ for category in categories:
                 product_url = product.find_element_by_tag_name('a').get_attribute('href')
                 print(f"{category} : {product_url}")
                 temp.append(product_url)
+    
             dic['url'] = temp 
 
             # Append the dictionary to the dataframe, which currently has [label, url] as its columns
             df = df.append(pd.DataFrame(dic), ignore_index = True)
+            i += 1
         except:
-            print("Could not find URL")
+            print("Failed to load category catalogue, retrying")
             
 print(df)
 
@@ -61,6 +66,7 @@ df = pd.concat([df, df2], axis = 1)
 entries = len(df)
 print(f"Entries {entries}")
 
+i = 0
 for i in range(entries):
     ur = df.url[i]
     try:
@@ -91,9 +97,9 @@ for i in range(entries):
                 df[parameter.lower()][i] = value
 
         print(df.iloc[i]) 
-       
+        
     except:
-        print("Could not obtain data")    
+        print("Failed to load data for product")    
         
 print(df)
 
