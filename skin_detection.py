@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from numpy.core.numeric import allclose
 import pandas as pd
 from sklearn.cluster import KMeans
 
@@ -19,77 +18,82 @@ def display_image(image, name):
 
 # segment using otsu binarization and thresholding
 def segment_otsu(image_grayscale, img_BGR):
-    threshold_value, threshold_image = cv2.threshold(
+    threshold_value, threshold_image_otsu = cv2.threshold(
         image_grayscale, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-    display_image(threshold_image, "otsu")
-    threshold_image_binary = 1 - threshold_image/255
+    threshold_value, threshold_image_max = cv2.threshold(
+        image_grayscale, 0, np.max(image_grayscale), cv2.THRESH_BINARY_INV)
+    display_image(threshold_image_otsu, "otsu")
+    display_image(threshold_image_max, "max")
+
+    masked_img = cv2.bitwise_and(img_BGR, img_BGR, mask=threshold_image_otsu)
+    display_image(masked_img, "masked_img")
+    # threshold_image_binary = 1 - threshold_image_otsu/255
     # cv2.imshow("img_binary", threshold_image_binary)
-    threshold_image_binary = np.repeat(
-        threshold_image_binary[:, :, np.newaxis], 3, axis=2)
-    img_face_only = np.multiply(threshold_image_binary, img_BGR)
-    # cv2.imshow("bgr", img_BGR)
-    if(img_face_only.all() == threshold_image_binary.all()):
-        print("Is the same brudda\n")
-    else:
-        print("No brudda! not same\n")
-    return img_face_only
+    # threshold_image_otsuage_binary = npthreshold_image_otsu(
+    #     threshold_image_binary[:, :, np.newaxis], 3, axis=2)
+    # img_face_only = np.multiply(threshold_image_binary, img_BGR)
+    # # cv2.imshow("bgr", img_BGR)
+    # if(img_face_only.all() == threshold_image_binary.all()):
+    #     print("Is the same brudda\n")
+    # else:
+    #     print("No brudda! not same\n")
+    return masked_img
 
 # ---- MAIN ----#
 
 
-# read in image into openCV BGR and grayscale
-image_path = "images\Optimized-DynamicRange_SamsungGalaxyS10Plus.jpg"
-
+# read in image into openCV
+image_path = "images\Optimized-050_AppleiPhoneXSMax_DxOMark_Selfie-e1557175226410.jpg"
 img_BGR = cv2.imread(image_path, 3)
-display_image(img_BGR, "BGR")
 
+# Grayscle and Thresholding and HSV & YCrCb color space conversions
 img_grayscale = cv2.cvtColor(img_BGR, cv2.COLOR_BGR2GRAY)
+# foreground and background segmentation
+img_no_background = segment_otsu(img_grayscale, img_BGR)
+img_HSV = cv2.cvtColor(img_no_background, cv2.COLOR_BGR2HSV)
+img_YCrCb = cv2.cvtColor(img_no_background, cv2.COLOR_BGR2YCrCb)
+
+# Display all images
+display_image(img_BGR, "BGR")
 display_image(img_grayscale, "grayscale")
-
-# foreground and background segmentation (otsu)
-img_face_only = segment_otsu(img_grayscale, img_BGR)
-display_image(img_face_only, "segmented BGR")
-
-# convert to HSV and YCrCb color spaces and detect potential pixels
-img_HSV = cv2.cvtColor(img_BGR, cv2.COLOR_BGR2HSV)
+display_image(img_no_background, "segmented BGR")
 display_image(img_HSV, "HSV")
-img_YCrCb = cv2.cvtColor(img_BGR, cv2.COLOR_BGR2YCrCb)
 display_image(img_YCrCb, "YCrCb")
 
-# aggregate skin pixels
-# blue = []
-# green = []
-# red = []
-
 height, width = img_grayscale.shape
+img_skin_predict = img_grayscale
 
+# Predict skin pixels
 for i in range(height):
     for j in range(width):
         if((img_HSV.item(i, j, 0) <= 170) and (140 <= img_YCrCb.item(i, j, 1) <= 170) and (90 <= img_YCrCb.item(i, j, 2) <= 120)):
-            img_grayscale[i, j] = 255
+            img_skin_predict[i, j] = 255
         else:
-            img_grayscale[i, j] = 0
-
-
-display_image(img_grayscale, "final segmentation")
+            img_skin_predict[i, j] = 0
+display_image(img_skin_predict, "skin prediction")
 
 # Contruction the dataframe for K-means clustering
-gray = cv2.cvtColor(img_BGR, cv2.COLOR_BGR2GRAY)
+dframe = pd.DataFrame()
+dframe['H'] = img_HSV.reshape([-1, 3])[:, 0]
+
+# Getting the y-x coordintated
+gray = cv2.cvtColor(img_no_background, cv2.COLOR_BGR2GRAY)
 yx_coords = np.column_stack(np.where(gray >= 0))
-
-dframe = pd.DataFrame(img_HSV.reshape([-1, 3])[:, 0], columns=['H'])
-
 # dframe['YX'] = tuple(yx_coords[:])
 dframe['Y'] = yx_coords[:, 0]
 dframe['X'] = yx_coords[:, 1]
 
 dframe['Cr'] = img_YCrCb.reshape([-1, 3])[:, 1]
 dframe['Cb'] = img_YCrCb.reshape([-1, 3])[:, 2]
+dframe['I'] = img_skin_predict.reshape([1, img_skin_predict.size])[0]
+print("initial dframe : \n", dframe)
 
-dframe['I'] = img_grayscale.reshape([1, img_grayscale.size])[0]
+# Remove Black pixels - which are already segmented
+dframe_removed = dframe[dframe['H'] == 0]
+dframe.drop(dframe[dframe['H'] == 0].index, inplace=True)
+print("filtered dframe : \n", dframe)
 
-print(dframe)
-
+# K-means
 kmeans = KMeans(
     init="random",
     n_clusters=3,
@@ -99,39 +103,29 @@ kmeans = KMeans(
 )
 kmeans.fit(dframe)
 
+# Add cluster-label column to the dataframe
+dframe_removed['cluster'] = np.full((dframe_removed.shape[0], 1), -1)
 dframe['cluster'] = kmeans.labels_
+
+# Get the skin cluster label - which has the highest I value
 km_cc = kmeans.cluster_centers_
 skin_cluster_row = km_cc[km_cc[:, -1] == max(km_cc[:, -1]), :]
 skin_cluster_label = np.where(
     [np.allclose(row, skin_cluster_row) for row in km_cc])[0][0]
 
-cluster_label_mat = dframe['cluster'].values.reshape(height, width)
+# Append removed pixels to the dataframe and get cluster matrix
+dframe = dframe.append(dframe_removed, ignore_index=False).sort_index()
+dframe['cluster'] = (dframe['cluster'] == skin_cluster_label).astype(int) * 255
+cluster_label_mat = np.asarray(
+    dframe['cluster'].values.reshape(height, width), dtype=np.uint8)
 
-print(km_cc)
-print(skin_cluster_row)
-print(skin_cluster_label)
-print(cluster_label_mat)
-for i in range(height):
-    for j in range(width):
-        # This conditional is taking almost eternity for this loops to process
-        if (cluster_label_mat[i, j] != skin_cluster_label):
-            img_BGR[i, j] = [0, 0, 0]
+# Print obtained
+print("kmeans.cluster_centers_", km_cc)
+print("skin_cluster_row", skin_cluster_row)
+print("skin_cluster_label", skin_cluster_label)
+print("skin_cluster_label", cluster_label_mat)
+print("complete dframe : \n", dframe)
 
-display_image(img_BGR, "final segmentation")
-# not dframe.loc[(dframe['Y'] == i) & (dframe['X'] == j)]['cluster'].values[0] == skin_cluster_label
-
-# for i in range (height):
-#     for j in range (width):
-#         if((img_HSV.item(i, j, 0) <= 170) and (140 <= img_YCrCb.item(i, j, 1) <= 170) and (90 <= img_YCrCb.item(i, j, 2) <= 120)):
-#             blue.append(img_face_only[i, j].item(0))
-#             green.append(img_face_only[i, j].item(1))
-#             red.append(img_face_only[i, j].item(2))
-#         else:
-#             img_face_only[i, j] = [0, 0, 0]
-#             img_BGR[i, j] = [0, 0, 0]
-
-# display_image(img_face_only, "final segmentation")
-
-# determine mean skin tone estimate
-# skin_tone_estimate_BGR = [np.mean(blue), np.mean(green), np.mean(red)]
-# print ("mean skin tone estimate (BGR)", skin_tone_estimate_BGR[0], skin_tone_estimate_BGR[1], skin_tone_estimate_BGR[2], "]")
+# final segmentation
+final_segment_img = cv2.bitwise_and(img_BGR, img_BGR, mask=cluster_label_mat)
+display_image(final_segment_img, "final segmentation")
