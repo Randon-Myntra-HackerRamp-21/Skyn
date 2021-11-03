@@ -44,8 +44,9 @@ def segment_otsu(image_grayscale, img_BGR):
     plt.legend()
     plt.show()
 
-    threshold_type = cv2.THRESH_BINARY if Tmax < 200 else cv2.THRESH_BINARY_INV
-    Totsu, threshold_image = cv2.threshold(
+    threshold_type = (cv2.THRESH_BINARY if Tmax <
+                      220 else cv2.THRESH_BINARY_INV)
+    Tfinal, threshold_image = cv2.threshold(
         image_grayscale, Tfinal, 255, threshold_type)
     display_image(threshold_image, "threshold_image")
     masked_img = cv2.bitwise_and(img_BGR, img_BGR, mask=threshold_image)
@@ -66,7 +67,7 @@ def segment_otsu(image_grayscale, img_BGR):
 
 
 # read in image into openCV
-image_path = "D:\My Stuff\Pictures\phonephotos\\20200604_070026.jpg"
+image_path = "images\Optimized-050_AppleiPhoneXSMax_DxOMark_Selfie-e1557175226410.jpg"
 img_BGR = cv2.imread(image_path, 3)
 img_BGR = cv2.resize(img_BGR, (375, 500))
 
@@ -104,8 +105,8 @@ dframe['H'] = img_HSV.reshape([-1, 3])[:, 0]
 # Getting the y-x coordintated
 gray = cv2.cvtColor(img_no_background, cv2.COLOR_BGR2GRAY)
 yx_coords = np.column_stack(np.where(gray >= 0))
-dframe['Y'] = yx_coords[:, 0]
-dframe['X'] = yx_coords[:, 1]
+# dframe['Y'] = yx_coords[:, 0]
+# dframe['X'] = yx_coords[:, 1]
 
 dframe['Cr'] = img_YCrCb.reshape([-1, 3])[:, 1]
 dframe['Cb'] = img_YCrCb.reshape([-1, 3])[:, 2]
