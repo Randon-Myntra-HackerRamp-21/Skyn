@@ -19,7 +19,7 @@ def skin_detection(img_path):
         dframe, dframe_removed, skin_cluster_label, height, width)
     # display_all_images(images)
     final_segment(images, cluster_label_mat)
-    return skin_cluster_row
+    return np.delete(skin_cluster_row, -1)
 
 # display an image plus label and wait for key press to continue
 
@@ -181,4 +181,4 @@ def final_segment(images, cluster_label_mat):
     display_image(final_segment_img, "final segmentation")
 
 
-skin_detection("images\Optimized-20191221_123814.jpg")
+# print(skin_detection("images\Optimized-selfieNig-cropped.jpg"))
