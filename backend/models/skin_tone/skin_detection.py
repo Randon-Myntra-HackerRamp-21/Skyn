@@ -18,7 +18,7 @@ def skin_detection(img_path):
     cluster_label_mat = cluster_matrix(
         dframe, dframe_removed, skin_cluster_label, height, width)
     # display_all_images(images)
-    final_segment(images, cluster_label_mat)
+    # final_segment(images, cluster_label_mat)
     return np.delete(skin_cluster_row, -1)
 
 # display an image plus label and wait for key press to continue
@@ -42,7 +42,7 @@ def thresholding(images):
     Tmax = np.where(histogram[:] == max(histogram[:]))[0][0]
     Tfinal = round((Tmax + Totsu)/2) if Tmax > 10 else round((Tmax + Totsu)/4)
 
-    plot_histogram(histogram, bin_edges, Totsu, Tmax, Tfinal)
+    # plot_histogram(histogram, bin_edges, Totsu, Tmax, Tfinal)
 
     threshold_type = (cv2.THRESH_BINARY if Tmax <
                       220 else cv2.THRESH_BINARY_INV)

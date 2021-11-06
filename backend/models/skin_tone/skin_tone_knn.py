@@ -18,3 +18,6 @@ def skin_tone_knn(image_path):
     X_test = [mean_color_values]
     y_pred = classifier.predict(X_test)
     return y_pred[0]
+
+
+print(skin_tone_knn("D:\Mynthra-hack\skintone\simple-skin-detection\ML\Skin metrics\Skin tone\public\\test images\Optimized-DynamicRange_SamsungGalaxyS10Plus.jpg"))
