@@ -7,7 +7,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing.image import img_to_array
-import skin_tone_knn
+from models.skin_tone.skin_tone_knn import identify_skin_tone
 from flask import Flask, request 
 from flask_restful import Api, Resource, reqparse, abort
 import werkzeug
@@ -83,7 +83,7 @@ class SkinMetrics(Resource):
         file.save(file_path)
         skin_type = prediction_skin(file_path)
         acne_type = prediction_acne(file_path)
-        tone = skin_tone_knn.identify_skin_tone(file_path)
+        tone = identify_skin_tone(file_path)
         print(skin_type)
         print(acne_type)
         print(tone)

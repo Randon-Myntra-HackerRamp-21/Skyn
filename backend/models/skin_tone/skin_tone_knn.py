@@ -3,8 +3,7 @@ To classify the input skin into one of the 6 skin tones
 """
 import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
-from skin_detection import skin_detection
-
+from models.skin_tone.skin_detection import skin_detection
 
 def identify_skin_tone(image_path):
     mean_color_values = skin_detection(image_path)
