@@ -3,7 +3,7 @@ import tensorflow as tf
 print('Loading model ...')
 model = tf.keras.models.load_model('saved_model')
 
-class_names = ['Level_0','Level_1','Level_2']
+class_names = ['Low','Moderate','Severe']
 
 def load_and_prep_image(filename, img_shape=224):
   img = tf.io.read_file(filename)
