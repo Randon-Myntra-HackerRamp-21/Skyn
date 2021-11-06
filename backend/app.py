@@ -89,7 +89,7 @@ class SkinMetrics(Resource):
         print(tone)
        
 
-        return {'message':'okay'}
+        return {'type':skin_type, 'tone':tone, 'acne':acne_type}, 200
 
         
 
