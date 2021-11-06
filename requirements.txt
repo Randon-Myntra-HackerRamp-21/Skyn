@@ -1,0 +1,12 @@
+numpy
+pandas
+matplotlib
+sklearn
+Flask==2.0.2
+Flask-RESTful==0.3.9
+tensorflow
+opencv-python
+Werkzeug
+Jinja2
+click
+reparse==3.0
