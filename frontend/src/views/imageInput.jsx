@@ -8,7 +8,7 @@ import Container from '@mui/material/Container';
 function ImageInput() {
     return (
         <>
-            <Container maxWidth="xs" sx={{padding: 0}}>
+            <Container maxWidth="xs" sx={{padding: 0}} alignItems="center">
                 <Grid container justify="center">
                     <WebcamCapture />
                 </Grid>

@@ -1,0 +1,12 @@
+#overlay {
+  width: inherit;
+height: inherit;
+  border: 20px solid;
+  position: absolute;
+  z-index: 15;
+}
+
+#webcam {
+  position: relative;
+  z-index: 5;
+}
