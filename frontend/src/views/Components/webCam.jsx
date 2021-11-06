@@ -2,7 +2,6 @@ import React,{useRef, useCallback, useState, useEffect} from "react";
 import Webcam from "react-webcam";
 import * as faceapi from 'face-api.js';
 
-import './webCam.css'
 // MUI
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -15,6 +14,10 @@ function getWindowDimensions() {
     height
   };
 }
+
+const aspectRatio = 4/3;
+const thresholdPercentFace = 0.3;
+const thresholdFaceScore = 0.7;
 
 function useWindowDimensions() {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
@@ -29,9 +32,7 @@ function useWindowDimensions() {
     return windowDimensions;
 }
 
-const aspectRatio = 4/3;
-
-const WebcamCapture = () => {
+const WebcamCapture = ({setImageSrc}) => {
     let camHeight = useWindowDimensions().height
     let camWidth = useWindowDimensions().width
     if(camHeight > camWidth) {
@@ -45,27 +46,23 @@ const WebcamCapture = () => {
         width: camWidth,
         facingMode: "user"
     };
-    //1024 x 768
-    
-    const videoRef = useRef()
-    const canvasRef = useRef()
-    
 
-    useEffect( () =>
-        {
-            console.log(videoConstraints.height)
-            console.log(videoConstraints.width)
-        }, [videoConstraints.height, videoConstraints.width]
-    )
-    // const webcamRef = useRef(null);
-    // const capture = useCallback(
-    //     () => {
-    //         const imageSrc = webcamRef.current.getScreenshot();
-    //         console.log(imageSrc)
-    //     }, [webcamRef]
-    // );
+    // useEffect( () =>
+    //     {
+    //         console.log(videoConstraints.height)
+    //         console.log(videoConstraints.width)
+    //     }, [videoConstraints.height, videoConstraints.width]
+    // )
+    const webcamRef = useRef(null);
+    const capture = useCallback(
+        () => {
+            const imageSrc = webcamRef.current.getScreenshot();
+            console.log(imageSrc)
+            setImageSrc(imageSrc)
+        }, [webcamRef]
+    );
     const handleCapture = () => {
-        // capture();
+        capture();
     }
     
     const [initialising, setInitialising] = useState(false)
@@ -78,65 +75,69 @@ const WebcamCapture = () => {
                 faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI),
                 faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URI),
                 faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URI),
-            ]).then(startVideo);
+            ]).then(() => {console.log("models imported")});
         }
         loadModels();
     },[])
     
-    const startVideo = () => {
-        navigator.getUserMedia = ( navigator.getUserMedia ||
-                       navigator.webkitGetUserMedia ||
-                       navigator.mozGetUserMedia ||
-                       navigator.msGetUserMedia);
-        navigator.getUserMedia(
-            {
-                video: {},
-            },
-            (stream) => (videoRef.current.srcObject = stream),
-            (err) => console.log(err)
-        );
-    }
 
+    const [faceOK, setFaceOK] = useState(null)
     const handleVideoOnPlay = () => {
         setInterval( async () => {
             if(initialising) {
                 setInitialising(false)
             }
-            const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions());
-            // console.log(detections)
-        }, 100)
+            const detections = await faceapi.detectAllFaces(webcamRef.current.video, new faceapi.TinyFaceDetectorOptions());
+            if(detections.length > 1) {
+                // Multiple faces
+                setFaceOK("Multiple faces detected")
+            }
+            else if(detections[0] !== undefined) {
+                // One face
+                const boxArea = Math.round(detections[0].box.height) * Math.round(detections[0].box.width)
+                const ImageArea = detections[0].imageWidth * detections[0].imageHeight
+                const percentFace = boxArea / ImageArea
+
+                if(percentFace < thresholdPercentFace) {
+                    // Not close enough
+                    setFaceOK("Come closer")
+                } else if(detections[0].score < thresholdFaceScore) {
+                    // detected face score is low
+                    setFaceOK("Blurry or Not enough lighting")
+                } else {
+                    // all conditions satisfied
+                    setFaceOK("OK")
+                }
+            }
+            else {
+                // No face
+                setFaceOK("no face detected")
+            }
+        }, 500)
     }
 
     return (
     <>
         <Grid item>
         <Typography variant="h5" component="div" textAlign="center">
-            {initialising ? "Initialising..." : "Ready"}
+            {initialising ? "Initialising..." : faceOK}
         </Typography>
-            {/* <Webcam
+        <Webcam
             id="webcam"
             audio={false}
             height={videoConstraints.height}
             width={videoConstraints.width}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}>
-            </Webcam> */}
-            <video ref={videoRef} autoPlay muted 
-            height={videoConstraints.height}
-            width={videoConstraints.width}
-            onPlay={handleVideoOnPlay}>
-                <canvas ref={canvasRef} id="overlay"
-                height={videoConstraints.height}
-                width={videoConstraints.width}/>
-            </video>
+            videoConstraints={videoConstraints}
+            onPlay={handleVideoOnPlay}/>
         </Grid>
         <Grid item xs={12}>
             <Button 
-            onClick={handleCapture} 
-            variant="contained"
-            disabled={initialising}
-            fullWidth>
+                onClick={handleCapture} 
+                variant="contained"
+                disabled={(initialising) || (faceOK !== "OK")}
+                fullWidth>
                 Capture photo
             </Button>
         </Grid>
