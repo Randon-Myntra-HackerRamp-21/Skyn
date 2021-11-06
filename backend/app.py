@@ -11,6 +11,7 @@ from models.skin_tone.skin_tone_knn import identify_skin_tone
 from flask import Flask, request 
 from flask_restful import Api, Resource, reqparse, abort
 import werkzeug
+from models.recommender.rec import recs_essentials, makeup_recommendation
 
 app = Flask(__name__)
 api = Api(app)
@@ -70,6 +71,54 @@ img_put_args = reqparse.RequestParser()
 img_put_args.add_argument("file", type=werkzeug.datastructures.FileStorage, location='files', help="Please provide a valid image file")
 
 
+rec_args = reqparse.RequestParser()
+
+rec_args.add_argument("normal", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("dry", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("oily", type=int, help="Name of the video is required", required=True)
+
+rec_args.add_argument("combination", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("acne", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("sensitive", type=int, help="Name of the video is required", required=True)
+
+rec_args.add_argument("fine lines", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("wrinkles", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("redness", type=int, help="Name of the video is required", required=True)
+
+rec_args.add_argument("dull", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("pore", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("pigmentation", type=int, help="Name of the video is required", required=True)
+
+rec_args.add_argument("blackheads", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("whiteheads", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("blemishes", type=int, help="Name of the video is required", required=True)
+
+rec_args.add_argument("dark circles", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("eye bags", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("dark spots", type=int, help="Name of the video is required", required=True)
+
+
+class Recommendation(Resource):
+    def put(self):
+        args = rec_args.parse_args()
+        fv = []
+        skin_type = 'all'
+        skin_tone = 'medium to dark'
+        for key, value in args.items():
+            if key == 'skin type':
+                skin_type = key
+            elif key == 'skin tone':
+                skin_tone = key
+                continue
+            fv.append(int(value))
+
+        general = recs_essentials(fv, None)
+        makeup = makeup_recommendation(skin_tone, skin_type)
+        return {'general':general, 'makeup':makeup}
+        
+        
+       
+
 
 
 
@@ -95,6 +144,7 @@ class SkinMetrics(Resource):
 
 
 api.add_resource(SkinMetrics, "/upload")
+api.add_resource(Recommendation, "/recommend")
 
 
 # @app.route("/", methods=['GET', 'POST'])
