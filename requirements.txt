@@ -1,0 +1,11 @@
+numpy
+pandas
+matplotlib
+sklearn
+Flask
+tensorflow
+opencv-python
+Werkzeug
+Jinja2
+
+
