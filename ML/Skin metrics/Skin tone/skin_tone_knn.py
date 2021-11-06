@@ -6,7 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier
 
 
 def skin_tone_knn(mean_values):
-    df = pd.read_csv("public\skin_tone_dataset.csv")
+    df = pd.read_csv("public/skin_tone_dataset.csv")
     X = df.iloc[:, [1, 2, 3]].values
     y = df.iloc[:, 0].values
 
