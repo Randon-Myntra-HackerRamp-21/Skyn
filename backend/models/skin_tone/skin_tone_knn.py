@@ -18,4 +18,3 @@ def skin_tone_knn(image_path):
     X_test = [mean_color_values]
     y_pred = classifier.predict(X_test)
     return y_pred[0]
-
