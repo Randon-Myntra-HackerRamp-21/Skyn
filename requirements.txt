@@ -9,3 +9,4 @@ opencv-python
 Werkzeug
 Jinja2
 click
+reparse==3.0
