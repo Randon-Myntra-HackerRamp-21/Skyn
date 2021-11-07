@@ -1,4 +1,7 @@
 import React,{useState} from 'react';
+import { UploadImage } from '../controllers/actions'
+import {useNavigate} from 'react-router-dom';
+
 import WebcamCapture from './Components/webCam'
 
 // MUI
@@ -10,28 +13,10 @@ import Button from '@mui/material/Button';
 function ImageInput() {
     const [landingPage, setLandingPage] = useState(true)
     const [imageSrc, setImageSrc] = useState(null)
+    const navigate = useNavigate();
     if(imageSrc !== null) {
         console.log("we got an image")
-        const data = new FormData()
-            data.append("file", imageSrc)
-            fetch("predict", {
-                method: "put",
-                body: data
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.error) {
-                        console.log("Please add a photograph")
-                    }
-                    else {
-                        console.log("All fin")
-                    }
-
-                })
-                .catch(err => {
-
-                    console.log(err.message)
-                })
+        UploadImage(imageSrc, navigate)
     }
 
     return (
