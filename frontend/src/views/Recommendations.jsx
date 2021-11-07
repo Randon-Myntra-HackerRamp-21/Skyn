@@ -81,7 +81,7 @@ const Recommendations = () => {
                             <ProductCard
                                 name={prod.name}
                                 brand={prod.brand}
-                                image={prod.image}
+                                image={prod.img}
                                 price={prod.price}
                                 url={prod.url}
                                 concern={prod.concern} />
@@ -104,7 +104,7 @@ const Recommendations = () => {
                     <ProductCard
                         name={prod.name}
                         brand={prod.brand}
-                        image={prod.image}
+                        image={prod.img}
                         price={prod.price}
                         url={prod.url}
                         concern={prod.concern} />
