@@ -72,7 +72,7 @@ const Form = () => {
                         <div 
                         style={{height:"3rem", 
                             width:"3rem", 
-                            backgroundColor: skinToneColors[currTone],
+                            backgroundColor: skinToneColors[currTone-1],
                             margin: "0 auto",
                             justifySelf:"center",
                             borderRadius: "10%",
