@@ -1,4 +1,7 @@
 import React, { useState, useRef} from "react";
+import {useNavigate} from 'react-router-dom';
+
+// MUI
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Radio from '@mui/material/Radio';
@@ -13,6 +16,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
+// controllers
+import { putForm } from '../controllers/actions'
+
 const skinToneValues = [1, 2, 3, 4, 5, 6]
 const skinToneColors = ["rgb(249, 245, 236)",
     "rgb(250, 245, 234)",
@@ -21,7 +27,6 @@ const skinToneColors = ["rgb(249, 245, 236)",
     "rgb(105, 59, 41)",
     "rgb(33, 28, 40)",
 ]
-const color = "red"
 const skinMetrics = {
     tone: 5.0,
     type: "All",
@@ -30,6 +35,8 @@ const skinMetrics = {
 const skinTypes = ["All", "Oily", "Normal", "Dry"]
 const acne = ['Low', 'Moderate', 'Severe']
 const otherConcerns = ['sensitive', 'fine lines', 'wrinkles', 'redness', 'pore', 'pigmentation', 'blackheads', 'whiteheads', 'blemishes', 'dark circles', 'eye bags', 'dark spots']
+
+
 const Form = () => {
     const [currType, setCurrType] = useState()
     const [currTone, setCurrTone] = useState()
@@ -59,8 +66,8 @@ const Form = () => {
     const handleAcne = (e) => {
         setAcne(e.target.value)
     }
+    const navigate = useNavigate()
     const handleSubmit = () => {
-
         if (currType === 'All') {
             features['normal'] = true;
             features['dry'] = true;
@@ -83,27 +90,7 @@ const Form = () => {
             }
         }
         console.log({"features": features, "type":currType, "tone":currTone})
-        fetch("/recommend", {
-            method: "put",
-            headers: {
-                "Content-Type": "application/json",
-
-            },
-            body: JSON.stringify({ "features": features, "type":currType, "tone":currTone})
-        }).then(res => res.json())
-            .then(data => {
-
-                if (data.error) {
-                    console.log("Error")
-                }
-                else {
-                    console.log(data)
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-
-
+        putForm(features, currType, currTone, navigate)
     }
 
     return (
