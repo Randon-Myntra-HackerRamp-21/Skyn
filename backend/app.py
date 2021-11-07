@@ -22,7 +22,7 @@ api = Api(app)
 
 class_names1 = ['Dry_skin','Normal_skin','Oil_skin']
 class_names2 = ['Low','Moderate','Severe']
-
+skin_tone_dataset = 'models/skin_tone/skin_tone_dataset.csv'
 def get_model():
     global model1, model2
     model1 = load_model('./models/skin_model')
@@ -132,7 +132,7 @@ class SkinMetrics(Resource):
         im.save(file_path)
         skin_type = prediction_skin(file_path)
         acne_type = prediction_acne(file_path)
-        tone = identify_skin_tone(file_path)
+        tone = identify_skin_tone(file_path, dataset=skin_tone_dataset)
         print(skin_type)
         print(acne_type)
         print(tone)
