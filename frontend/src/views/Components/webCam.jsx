@@ -20,11 +20,11 @@ const thresholdPercentFace = 0.3;
 const thresholdFaceScore = 0.7;
 
 function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
-  useEffect(() => {
+    useEffect(() => {
     function handleResize() {
-      setWindowDimensions(getWindowDimensions());
+        setWindowDimensions(getWindowDimensions());
     }
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);}, []);
