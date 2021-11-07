@@ -43,6 +43,7 @@ const Form = () => {
     const {state} = useLocation();
     const {data} = state; 
     const {type, tone, acne} = data;
+    console.log(data)
     const [currType, setCurrType] = useState(type)
     const [currTone, setCurrTone] = useState(parseInt(tone))
     const [currAcne, setAcne] = useState(acne)
