@@ -33,7 +33,7 @@ function useWindowDimensions() {
     return windowDimensions;
 }
 
-const WebcamCapture = ({ setImageSrc }) => {
+const WebcamCapture = ({ setImageSrc, setOnPlay, onPlay }) => {
     let camHeight = useWindowDimensions().height
     let camWidth = useWindowDimensions().width
     if (camHeight > camWidth) {
@@ -60,12 +60,8 @@ const WebcamCapture = ({ setImageSrc }) => {
             const imageSrc = webcamRef.current.getScreenshot();
             console.log(imageSrc)
             setImageSrc(imageSrc)
-            
         }, [webcamRef]
     );
-    const handleCapture = () => {
-        capture();
-    }
 
     const [initialising, setInitialising] = useState(false)
     useEffect(() => {
@@ -83,14 +79,16 @@ const WebcamCapture = ({ setImageSrc }) => {
     }, [])
 
 
+
     const [faceOK, setFaceOK] = useState(null)
     const handleVideoOnPlay = () => {
         setInterval(async () => {
             if (initialising) {
                 setInitialising(false)
             }
-            const detections = await faceapi.detectAllFaces(webcamRef.current.video, new faceapi.TinyFaceDetectorOptions());
-            console.log(webcamRef.current.video)
+            let detections = []
+            if(webcamRef.current !== null)
+                detections = await faceapi.detectAllFaces(webcamRef.current.video, new faceapi.TinyFaceDetectorOptions());
             if (detections.length > 1) {
                 // Multiple faces
                 setFaceOK("Multiple faces detected")
@@ -133,11 +131,11 @@ const WebcamCapture = ({ setImageSrc }) => {
                     ref={webcamRef}
                     screenshotFormat="image/jpeg"
                     videoConstraints={videoConstraints}
-                    onPlay={handleVideoOnPlay} />
+                    onUserMedia={handleVideoOnPlay} />
             </Grid>
             <Grid item xs={12}>
                 <Button
-                    onClick={handleCapture}
+                    onClick={capture}
                     variant="contained"
                     disabled={(initialising) || (faceOK !== "OK")}
                     fullWidth>
