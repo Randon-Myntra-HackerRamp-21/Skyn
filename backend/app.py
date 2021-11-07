@@ -72,7 +72,7 @@ get_model()
 
 
 img_put_args = reqparse.RequestParser()
-img_put_args.add_argument("file", type=werkzeug.datastructures.FileStorage, location='files', help="Please provide a valid image file")
+img_put_args.add_argument("file", help="Please provide a valid image file", required = True)
 
 
 rec_args = reqparse.RequestParser()
@@ -120,7 +120,7 @@ class Recommendation(Resource):
 class SkinMetrics(Resource):
     def put(self):
         args = img_put_args.parse_args()
-
+        print(args)
         file = args['file']
         starter = file.find(',')
         image_data = file[starter+1:]
