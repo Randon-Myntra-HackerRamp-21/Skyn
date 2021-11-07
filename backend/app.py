@@ -1,4 +1,5 @@
 import os
+from typing import List
 import numpy as np
 import pandas as pd
 from PIL import Image
@@ -73,46 +74,37 @@ img_put_args.add_argument("file", type=werkzeug.datastructures.FileStorage, loca
 
 rec_args = reqparse.RequestParser()
 
-rec_args.add_argument("normal", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("dry", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("oily", type=int, help="Name of the video is required", required=True)
+rec_args.add_argument("tone", type=int, help="Argument required", required=True)
+rec_args.add_argument("type", type=str, help="Argument required", required=True)
+rec_args.add_argument("features", type=dict, help="Argument required", required=True)
 
-rec_args.add_argument("combination", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("acne", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("sensitive", type=int, help="Name of the video is required", required=True)
 
-rec_args.add_argument("fine lines", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("wrinkles", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("redness", type=int, help="Name of the video is required", required=True)
-
-rec_args.add_argument("dull", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("pore", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("pigmentation", type=int, help="Name of the video is required", required=True)
-
-rec_args.add_argument("blackheads", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("whiteheads", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("blemishes", type=int, help="Name of the video is required", required=True)
-
-rec_args.add_argument("dark circles", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("eye bags", type=int, help="Name of the video is required", required=True)
-rec_args.add_argument("dark spots", type=int, help="Name of the video is required", required=True)
 
 
 class Recommendation(Resource):
     def put(self):
         args = rec_args.parse_args()
+        print(args)
+        features = args['features']
+        tone = args['tone']
+        skin_type = args['type'].lower()
+        skin_tone = 'light to medium'
+        if tone <= 2:
+            skin_tone = 'fair to light'
+        elif tone >= 4:
+            skin_tone = 'medium to dark'
+        print(f"{skin_tone}, {skin_type}")
         fv = []
-        skin_type = 'all'
-        skin_tone = 'medium to dark'
-        for key, value in args.items():
-            if key == 'skin type':
-                skin_type = key
-            elif key == 'skin tone':
-                skin_tone = key
-                continue
+        for key, value in features.items():
+            # if key == 'skin type':
+            #     skin_type = key
+            # elif key == 'skin tone':
+            #     skin_tone = key
+            #     continue
             fv.append(int(value))
 
         general = recs_essentials(fv, None)
+       
         makeup = makeup_recommendation(skin_tone, skin_type)
         return {'general':general, 'makeup':makeup}
         
