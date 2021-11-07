@@ -10,3 +10,4 @@ Werkzeug
 Jinja2
 click
 reparse==3.0
+Pillow

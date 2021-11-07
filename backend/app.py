@@ -13,6 +13,9 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort
 import werkzeug
 from models.recommender.rec import recs_essentials, makeup_recommendation
+import base64
+from io import BytesIO
+from PIL import Image
 
 app = Flask(__name__)
 api = Api(app)
@@ -119,9 +122,14 @@ class SkinMetrics(Resource):
         args = img_put_args.parse_args()
 
         file = args['file']
-        filename = file.filename
+        starter = file.find(',')
+        image_data = file[starter+1:]
+        image_data = bytes(image_data, encoding="ascii")
+        im = Image.open(BytesIO(base64.b64decode(image_data)))
+        
+        filename = 'image.png'
         file_path = os.path.join('./static',filename)                       
-        file.save(file_path)
+        im.save(file_path)
         skin_type = prediction_skin(file_path)
         acne_type = prediction_acne(file_path)
         tone = identify_skin_tone(file_path)
