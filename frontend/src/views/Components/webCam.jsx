@@ -70,9 +70,9 @@ const WebcamCapture = ({ setImageSrc, setOnPlay, onPlay }) => {
             setInitialising(true)
             Promise.all([
                 faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI),
-                faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI),
-                faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URI),
-                faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URI),
+                // faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI),
+                // faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URI),
+                // faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URI),
             ]).then(() => { console.log("models imported") });
         }
         loadModels();

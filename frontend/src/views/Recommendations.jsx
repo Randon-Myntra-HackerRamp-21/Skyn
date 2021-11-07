@@ -68,11 +68,14 @@ const Recommendations = () => {
     const {general, makeup} = data;
     return <>
         <Container sx={{ marginTop: "2vh", padding: 1 }} alignitems="center" width="inherit">
-            <Typography gutterBottom variant="h5" component="div" marginTop="2vh" textAlign="center">
+            <Typography gutterBottom variant="h4" component="div" marginTop="2vh" textAlign="center">
                 Skin care
             </Typography>
             {Object.keys(general).map((type, products) => {
-                return (<div><FormLabel component="legend">{type}</FormLabel><Grid container spacing={1}>
+                return (<div><Typography gutterBottom variant="h5" component="div" marginTop="2vh" color="text.secondary">
+                            {type}
+                        </Typography>
+                        <Grid container spacing={1}>
                     {general[type].map((prod) => {
                         return <Grid item xs={6} md={3}>
                             <ProductCard
@@ -87,7 +90,7 @@ const Recommendations = () => {
                 </Grid></div>)
             })}
 
-            <Typography gutterBottom variant="h5" component="div" marginTop="2vh" textAlign="center">
+            <Typography gutterBottom variant="h4" component="div" marginTop="2vh" textAlign="center">
                 Make up
             </Typography>
 

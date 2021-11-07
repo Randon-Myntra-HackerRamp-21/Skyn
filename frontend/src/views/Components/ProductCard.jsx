@@ -8,10 +8,11 @@ import Grid from '@mui/material/Grid';
 
 const unavailableImage = process.env.PUBLIC_URL+'./unavailable.png'
 
-export default function ProductCard({name="balls cream", price=2000, brand="balls itch", url="https://www.myntra.com/", concern=['wrinkles', 'acne'], image = ''}) {
+export default function ProductCard({name="cream", price=2000, brand="brand", url="https://www.myntra.com/", concern=[], image = ''}) {
     const redirectProduct = () => {
         window.location.replace(url);
     }
+    console.log(concern)
     return (  
         <Box onClick={redirectProduct} sx={{lineHeight:"low"}}>
             <Card sx={{ maxWidth: "50vw" }}>
@@ -25,14 +26,14 @@ export default function ProductCard({name="balls cream", price=2000, brand="ball
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                     {brand}
                     <Typography component="div" color="text.primary" variant="inline" sx={{float: "right", fontWeight:"bold"}}>
-                        ₹{price}
+                        {price}
                     </Typography>
                 </Typography>
                 <Typography gutterBottom variant="h6" component="div">
                 {name.length > 40 ? name.substring(0, 40)+"..." : name}
                 </Typography>
                 <Grid container>
-                    {concern.map((concern) => {
+                    {concern.filter(n => n).map((concern) => {
                         return <Grid item xs={12}><Typography 
                                     variant="body2" 
                                     color="white" 
@@ -44,7 +45,7 @@ export default function ProductCard({name="balls cream", price=2000, brand="ball
                                     paddingTop="1%"
                                     paddingBottom="1%"
                                     marginRight="2%"
-                                    >{concern.split(' ').join('-')}</Typography></Grid>
+                                    >{concern}</Typography></Grid>
                     })}
                 </Grid>
             </CardContent>
