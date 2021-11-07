@@ -2,12 +2,16 @@
 To classify the input skin into one of the 6 skin tones
 """
 import pandas as pd
+import os
 from sklearn.neighbors import KNeighborsClassifier
 from models.skin_tone.skin_detection import skin_detection
 
+
 def identify_skin_tone(image_path):
     mean_color_values = skin_detection(image_path)
-    df = pd.read_csv("skin_tone_dataset.csv")
+    # os.path.join("./models/skin_tone/skin_tone_dataset.csv")
+    df = df = pd.read_csv(os.path.dirname(
+        "./models/skin_tone/skin_tone_dataset.csv"))
     X = df.iloc[:, [1, 2, 3]].values
     y = df.iloc[:, 0].values
 
