@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 
-function Form() {
-    return (
-        <div>
-            
-        </div>
-    )
-}
 
-export default Form
+
+
+const Form = () => {
+ return (<h1>Hello</h1>)
+   
+};
+
+export default Form;
