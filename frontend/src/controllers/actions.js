@@ -1,6 +1,7 @@
 export const UploadImage = (imageSrc, navigate) => {
     const data = new FormData()
     data.append("file", imageSrc)
+    console.log(data)
     fetch("upload", {
         method: "put",
         body: data
@@ -20,12 +21,12 @@ export const UploadImage = (imageSrc, navigate) => {
     })
 }
 
-export const putForm = ({features, currType, currTone, navigate}) => {
-fetch("/recommend", {
+export const putForm = (features, currType, currTone, navigate) => {
+    console.log(features, currType, currTone, navigate)
+    fetch("/recommend", {
         method: "put",
         headers: {
             "Content-Type": "application/json",
-
         },
         body: JSON.stringify({ "features": features, "type":currType, "tone":currTone})
     })

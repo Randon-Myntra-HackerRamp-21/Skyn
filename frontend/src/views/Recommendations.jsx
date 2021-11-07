@@ -16,31 +16,34 @@ import ProductCard from './Components/ProductCard'
 //    'concern': ['deep nourishment', 'acne', 'blemishes', 'dull skin']},
 
 const Products = {
-    skinCare : {'face-moisturisers': [{'brand': 'azani active care',
-   'name': 'unisex acne rescue cream - 30 ml',
-   'price': '₹ 399',
-   'url': 'https://www.myntra.com/face-moisturisers/azani-active-care/azani-active-care-unisex-acne-rescue-cream---30-ml/15322518/buy',
-   'skin type': 'all',
-   'concern': ['deep nourishment', 'acne', 'blemishes', 'dull skin']},
-  {'brand': 'mamaearth',
-   'name': 'vitamin c face milk with peach for skin illumination 100 ml',
-   'price': '₹ 404',
-   'url': 'https://www.myntra.com/face-moisturisers/mamaearth/mamaearth-vitamin-c-face-milk-with-peach-for-skin-illumination-100-ml/12411986/buy',
-   'skin type': 'all',
-   'concern': ['acne', 'blemishes', 'pigmentation', 'dull skin']},]},
-   makeUp : {'foundations':[{'brand': 'wet n wild',
-  'name': 'sustainable photo focus matte face primer - partners in prime',
-  'price': '₹ 454',
-  'url': 'https://www.myntra.com/foundation-and-primer/wet-n-wild/wet-n-wild-sustainable-photo-focus-matte-face-primer---partners-in-prime/12045988/buy',
-  'skin type': 'normal',
-  'skin tone': 'light to medium'},
- {'brand': 'faces canada',
-  'name': 'ultime pro makeup fixer',
-  'price': '₹ 486',
-  'url': 'https://www.myntra.com/foundation-and-primer/faces-canada/faces-canada-ultime-pro-makeup-fixer/2421530/buy',
-  'skin type': 'normal',
-  'skin tone': 'light to medium'}]
-}
+    skinCare : 
+        {'face-moisturisers': 
+            [{'brand': 'azani active care',
+            'name': 'unisex acne rescue cream - 30 ml',
+            'price': '₹ 399',
+            'url': 'https://www.myntra.com/face-moisturisers/azani-active-care/azani-active-care-unisex-acne-rescue-cream---30-ml/15322518/buy',
+            'skin type': 'all',
+            'concern': ['deep nourishment', 'acne', 'blemishes', 'dull skin']},
+            {'brand': 'mamaearth',
+            'name': 'vitamin c face milk with peach for skin illumination 100 ml',
+            'price': '₹ 404',
+            'url': 'https://www.myntra.com/face-moisturisers/mamaearth/mamaearth-vitamin-c-face-milk-with-peach-for-skin-illumination-100-ml/12411986/buy',
+            'skin type': 'all',
+            'concern': ['acne', 'blemishes', 'pigmentation', 'dull skin']}]},
+   makeUp : 
+        {'foundations':
+            [{'brand': 'wet n wild',
+            'name': 'sustainable photo focus matte face primer - partners in prime',
+            'price': '₹ 454',
+            'url': 'https://www.myntra.com/foundation-and-primer/wet-n-wild/wet-n-wild-sustainable-photo-focus-matte-face-primer---partners-in-prime/12045988/buy',
+            'skin type': 'normal',
+            'skin tone': 'light to medium'},
+            {'brand': 'faces canada',
+            'name': 'ultime pro makeup fixer',
+            'price': '₹ 486',
+            'url': 'https://www.myntra.com/foundation-and-primer/faces-canada/faces-canada-ultime-pro-makeup-fixer/2421530/buy',
+            'skin type': 'normal',
+            'skin tone': 'light to medium'}]}
 }
 
 const Recommendations = () => {
