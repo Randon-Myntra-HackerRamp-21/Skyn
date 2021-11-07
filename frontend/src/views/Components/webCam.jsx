@@ -90,6 +90,7 @@ const WebcamCapture = ({ setImageSrc }) => {
                 setInitialising(false)
             }
             const detections = await faceapi.detectAllFaces(webcamRef.current.video, new faceapi.TinyFaceDetectorOptions());
+            console.log(webcamRef.current.video)
             if (detections.length > 1) {
                 // Multiple faces
                 setFaceOK("Multiple faces detected")
