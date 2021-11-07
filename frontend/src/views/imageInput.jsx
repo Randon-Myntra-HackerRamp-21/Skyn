@@ -5,9 +5,12 @@ import WebcamCapture from './Components/webCam'
 // MUI
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import Button from '@mui/material/Button';
 
 function ImageInput() {
-    const [imageSrc, setImageSrc] = useState(null)
+    const [landingPage, setLandingPage] = useState(true)
+    const [imageSrc, setImageSrc] = useState(null) 
     if(imageSrc !== null) {
         console.log("we got an image")
         const data = new FormData()
@@ -33,10 +36,21 @@ function ImageInput() {
     }
     return (
         <>
-            <Container maxWidth="xs" sx={{padding: 0}} alignItems="center" spacing={1}>
-                <Grid container justify="center">
-                    <WebcamCapture setImageSrc={setImageSrc}/>
-                </Grid>
+            <Container maxWidth="xs" sx={{padding: 0}} alignitems="center" spacing={1}>
+                <Grid container justify="center" sx={{maxHeight:"100vh"}}>
+                    {landingPage ? 
+                        <Grid item xs={6} sx={{margin:"40vh auto"}} textAlign="center">
+                            <PhotoCameraIcon sx={{fontSize:"5em"}}/>    
+                            <Button 
+                                onClick={() => {setLandingPage(false)}} 
+                                variant="contained"
+                                fullWidth>
+                                Take a photo
+                            </Button>
+                        </Grid>:
+                        <WebcamCapture setImageSrc={setImageSrc}/>
+                    }
+                </Grid>   
             </Container>
         </>
     )
