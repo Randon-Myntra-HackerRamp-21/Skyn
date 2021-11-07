@@ -1,4 +1,4 @@
-export const UploadImage = (imageSrc, navigate, setOnPlay) => {
+export const UploadImage = (imageSrc, navigate) => {
     const data = new FormData()
     data.append("file", imageSrc)
     fetch("upload", {
@@ -12,7 +12,6 @@ export const UploadImage = (imageSrc, navigate, setOnPlay) => {
         }
         else {
             navigate("/form")
-            setOnPlay(false)
             console.log("All fin")
         }
     })

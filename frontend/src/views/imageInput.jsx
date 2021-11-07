@@ -13,11 +13,10 @@ import Button from '@mui/material/Button';
 function ImageInput() {
     const [landingPage, setLandingPage] = useState(true)
     const [imageSrc, setImageSrc] = useState(null)
-    const [onPlay, setOnPlay] = useState(false)
     const navigate = useNavigate();
     if(imageSrc !== null) {
         console.log("we got an image")
-        UploadImage(imageSrc, navigate, setOnPlay)
+        UploadImage(imageSrc, navigate)
     }
 
     return (
@@ -34,7 +33,7 @@ function ImageInput() {
                                 Take a photo
                             </Button>
                         </Grid>:
-                        <WebcamCapture setImageSrc={setImageSrc} setOnPlay={setOnPlay} onPlay={onPlay}/>
+                        <WebcamCapture setImageSrc={setImageSrc}/>
                     }
                 </Grid>   
             </Container>
