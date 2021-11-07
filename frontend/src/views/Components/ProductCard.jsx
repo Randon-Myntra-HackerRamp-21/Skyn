@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 
 const unavailableImage = process.env.PUBLIC_URL+'./unavailable.png'
 
-export default function ProductCard({name="balls cream", Price=2000, brand="balls itch", url="https://www.myntra.com/", concern=['wrinkles', 'acne'], image = ''}) {
+export default function ProductCard({name="balls cream", price=2000, brand="balls itch", url="https://www.myntra.com/", concern=['wrinkles', 'acne'], image = ''}) {
     const redirectProduct = () => {
         window.location.replace(url);
     }
@@ -25,7 +25,7 @@ export default function ProductCard({name="balls cream", Price=2000, brand="ball
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                     {brand}
                     <Typography component="div" color="text.primary" variant="inline" sx={{float: "right", fontWeight:"bold"}}>
-                        ₹{Price}
+                        ₹{price}
                     </Typography>
                 </Typography>
                 <Typography gutterBottom variant="h6" component="div">

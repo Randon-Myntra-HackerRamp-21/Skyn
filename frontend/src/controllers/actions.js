@@ -37,7 +37,7 @@ export const putForm = (features, currType, currTone, navigate) => {
             console.log("Error")
         }
         else {
-            navigate("/recs")
+            navigate("/recs", {state : {data}})
             console.log(data)
         }
     }).catch(err => {
