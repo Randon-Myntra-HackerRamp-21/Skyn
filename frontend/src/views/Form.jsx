@@ -28,9 +28,9 @@ const skinToneColors = ["rgb(249, 245, 236)",
     "rgb(33, 28, 40)",
 ]
 const skinMetrics = {
-    tone: 5.0,
-    type: "All",
-    acne: "Severe"
+    tone: 5,
+    type: "Oily",
+    acne: "Moderate"
 }
 const skinTypes = ["All", "Oily", "Normal", "Dry"]
 const acne = ['Low', 'Moderate', 'Severe']
@@ -38,8 +38,8 @@ const otherConcerns = ['sensitive', 'fine lines', 'wrinkles', 'redness', 'pore',
 
 
 const Form = () => {
-    const [currType, setCurrType] = useState()
-    const [currTone, setCurrTone] = useState()
+    const [currType, setCurrType] = useState(skinMetrics.type)
+    const [currTone, setCurrTone] = useState(skinMetrics.tone)
     const [currAcne, setAcne] = useState()
     const [features, setFeatures] = useState({
         "normal": false, "dry": false, "oily": false, "combination": false,
@@ -113,7 +113,8 @@ const Form = () => {
                                 value={currTone}
                                 label="Age"
                                 onChange={handleTone}
-                                fullWidth>
+                                fullWidth
+                                defaultValue={skinMetrics.tone}>
                                 {skinToneValues.map((value) => {
                                     return (<MenuItem value={value}>{value}</MenuItem>)
                                 })}
@@ -124,7 +125,7 @@ const Form = () => {
                                 style={{
                                     height: "3rem",
                                     width: "3rem",
-                                    backgroundColor: skinToneColors[currTone-1],
+                                    backgroundColor: skinToneColors[3],
                                     margin: "0 auto",
                                     justifySelf: "center",
                                     borderRadius: "10%",
@@ -136,7 +137,7 @@ const Form = () => {
                         <RadioGroup
                             row
                             name="row-radio-buttons-group"
-                            defaultValue={currType}
+                            defaultValue={skinMetrics.type}
                             onChange={handleType}
                             value={currType}>
                             <Grid container>

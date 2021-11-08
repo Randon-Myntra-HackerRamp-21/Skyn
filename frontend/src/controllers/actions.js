@@ -12,6 +12,7 @@ export const UploadImage = (imageSrc, navigate) => {
             console.log("Please add a photograph")
         }
         else {
+            console.log(data)
             navigate("/form")
             console.log("All fin")
         }

@@ -62,6 +62,7 @@ const Products = {
     }
 }
 
+
 const Recommendations = () => {
     const {state} = useLocation();
     const {data} = state; 
