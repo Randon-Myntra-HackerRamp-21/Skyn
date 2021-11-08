@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
-df2 = pd.read_csv('./models/recommender/general_test.csv')
-makeup = pd.read_csv('./models/recommender/makeup_test.csv')
+df2 = pd.read_csv('./models/recommender/final.csv')
+makeup = pd.read_csv('./models/recommender/makeup_final.csv')
 entries = len(df2)
 LABELS = list(df2.label.unique())
 # features
@@ -35,8 +35,9 @@ def wrap(info_arr):
     result['name'] = info_arr[1]
     result['price'] = info_arr[2]
     result['url'] = info_arr[3]
-    result['skin type'] = info_arr[4]
-    result['concern'] = str(info_arr[5]).split(',')
+    result['img'] = info_arr[4]
+    result['skin type'] = info_arr[5]
+    result['concern'] = str(info_arr[6]).split(',')
     return result
 
 def wrap_makeup(info_arr):
@@ -46,8 +47,9 @@ def wrap_makeup(info_arr):
     result['name'] = info_arr[1]
     result['price'] = info_arr[2]
     result['url'] = info_arr[3]
-    result['skin type'] = info_arr[4]
-    result['skin tone'] = info_arr[5]
+    result['img'] = info_arr[4]
+    result['skin type'] = info_arr[5]
+    result['skin tone'] = info_arr[6]
     return result
 
 one_hot_encodings = np.zeros([entries, len(features)])
@@ -92,7 +94,7 @@ def recs_cs(vector = None, name = None, label = None, count = 5):
         dff = dff[dff['name'] != name]
     recommendations = dff.sort_values('cs', ascending=False).head(count)
     #   print(f"Top {count} matching {label} items")
-    data = recommendations[['brand', 'name', 'price', 'url','skin type','concern']].to_dict('split')['data']
+    data = recommendations[['brand', 'name', 'price', 'url','img','skin type','concern']].to_dict('split')['data']
     for element in data:
         products.append(wrap(element))
     return products
@@ -121,7 +123,7 @@ def makeup_recommendation(skin_tone, skin_type):
     dff = dff.append(makeup[(makeup['skin tone'] == skin_tone) & (makeup['skin type'] == skin_type) & (makeup['label'] == 'concealer')].head(2))
     dff = dff.append(makeup[(makeup['skin tone'] == skin_tone) & (makeup['skin type'] == skin_type) & (makeup['label'] == 'primer')].head(2))
     dff= dff.sample(frac = 1)
-    data = dff[['brand', 'name', 'price', 'url', 'skin type', 'skin tone']].to_dict('split')['data']
+    data = dff[['brand', 'name', 'price', 'url', 'img', 'skin type', 'skin tone']].to_dict('split')['data']
     for element in data:
         result.append(wrap_makeup(element))
     return result

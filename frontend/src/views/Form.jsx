@@ -18,6 +18,7 @@ import Select from '@mui/material/Select';
 
 // controllers
 import { putForm } from '../controllers/actions'
+import { useLocation } from 'react-router';
 
 const skinToneValues = [1, 2, 3, 4, 5, 6]
 const skinToneColors = ["rgb(249, 245, 236)",
@@ -33,14 +34,19 @@ const skinMetrics = {
     acne: "Moderate"
 }
 const skinTypes = ["All", "Oily", "Normal", "Dry"]
-const acne = ['Low', 'Moderate', 'Severe']
+const acnes = ['Low', 'Moderate', 'Severe']
 const otherConcerns = ['sensitive', 'fine lines', 'wrinkles', 'redness', 'pore', 'pigmentation', 'blackheads', 'whiteheads', 'blemishes', 'dark circles', 'eye bags', 'dark spots']
 
 
 const Form = () => {
-    const [currType, setCurrType] = useState(skinMetrics.type)
-    const [currTone, setCurrTone] = useState(skinMetrics.tone)
-    const [currAcne, setAcne] = useState()
+    
+    const {state} = useLocation();
+    const {data} = state; 
+    const {type, tone, acne} = data;
+    console.log(data)
+    const [currType, setCurrType] = useState(type)
+    const [currTone, setCurrTone] = useState(parseInt(tone))
+    const [currAcne, setAcne] = useState(acne)
     const [features, setFeatures] = useState({
         "normal": false, "dry": false, "oily": false, "combination": false,
         "acne": false, "sensitive": false, "fine lines": false, "wrinkles": false,
@@ -164,7 +170,7 @@ const Form = () => {
                             value={currAcne}>
 
                             <Grid container>
-                                {acne.map((ac) => {
+                                {acnes.map((ac) => {
                                     return (
                                         <Grid item >
                                             <FormControlLabel

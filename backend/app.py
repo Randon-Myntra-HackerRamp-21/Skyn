@@ -125,7 +125,7 @@ class SkinMetrics(Resource):
         filename = 'image.png'
         file_path = os.path.join('./static', filename)
         im.save(file_path)
-        skin_type = prediction_skin(file_path)
+        skin_type = prediction_skin(file_path).split('_')[0]
         acne_type = prediction_acne(file_path)
         tone = identify_skin_tone(file_path, dataset=skin_tone_dataset)
         print(skin_type)
