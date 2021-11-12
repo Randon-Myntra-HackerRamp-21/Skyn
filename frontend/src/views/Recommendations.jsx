@@ -77,7 +77,7 @@ const Recommendations = () => {
                             {type}
                         </Typography>
                         <Grid container spacing={1}>
-                    {general[type].map((prod) => {
+                    {general[type].slice(0,4).map((prod) => {
                         return <Grid item xs={6} md={3}>
                             <ProductCard
                                 name={prod.name}

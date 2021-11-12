@@ -28,7 +28,7 @@ const skinToneColors = ["rgb(249, 245, 236)",
     "rgb(105, 59, 41)",
     "rgb(33, 28, 40)",
 ]
-const skinMetrics = {
+let data = {
     tone: 5,
     type: "Oily",
     acne: "Moderate"
@@ -37,13 +37,17 @@ const skinTypes = ["All", "Oily", "Normal", "Dry"]
 const acnes = ['Low', 'Moderate', 'Severe']
 const otherConcerns = ['sensitive', 'fine lines', 'wrinkles', 'redness', 'pore', 'pigmentation', 'blackheads', 'whiteheads', 'blemishes', 'dark circles', 'eye bags', 'dark spots']
 
-
 const Form = () => {
     
     const {state} = useLocation();
-    const {data} = state; 
+    if(state !== null) {
+        data = state.data; 
+        console.log(data)
+    }
+    console.log("After the condtional : ", data)
     const {type, tone, acne} = data;
-    console.log(data)
+    console.log("Prefill : ", type, tone, acne)
+
     const [currType, setCurrType] = useState(type)
     const [currTone, setCurrTone] = useState(parseInt(tone))
     const [currAcne, setAcne] = useState(acne)
@@ -120,7 +124,7 @@ const Form = () => {
                                 label="Age"
                                 onChange={handleTone}
                                 fullWidth
-                                defaultValue={skinMetrics.tone}>
+                                defaultValue={tone}>
                                 {skinToneValues.map((value) => {
                                     return (<MenuItem value={value}>{value}</MenuItem>)
                                 })}
@@ -131,7 +135,7 @@ const Form = () => {
                                 style={{
                                     height: "3rem",
                                     width: "3rem",
-                                    backgroundColor: skinToneColors[3],
+                                    backgroundColor: skinToneColors[tone-1],
                                     margin: "0 auto",
                                     justifySelf: "center",
                                     borderRadius: "10%",
@@ -143,7 +147,7 @@ const Form = () => {
                         <RadioGroup
                             row
                             name="row-radio-buttons-group"
-                            defaultValue={skinMetrics.type}
+                            defaultValue={type}
                             onChange={handleType}
                             value={currType}>
                             <Grid container>
@@ -166,7 +170,7 @@ const Form = () => {
                             row
                             name="row-radio-buttons-group"
                             onChange={handleAcne}
-                            defaultValue={skinMetrics.acne}
+                            defaultValue={acne}
                             value={currAcne}>
 
                             <Grid container>

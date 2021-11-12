@@ -12,7 +12,7 @@ export default function ProductCard({name="cream", price=2000, brand="brand", ur
     const redirectProduct = () => {
         window.location.replace(url);
     }
-    console.log(concern)
+    concern = [...new Set(concern)]
     return (  
         <Box onClick={redirectProduct} sx={{lineHeight:"low"}}>
             <Card sx={{ maxWidth: "50vw" }}>
@@ -20,7 +20,7 @@ export default function ProductCard({name="cream", price=2000, brand="brand", ur
                 component="img"
                 height="200vh"
                 image={image}
-                alt="green iguana"
+                alt="Product image"
                 />
             <CardContent>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
