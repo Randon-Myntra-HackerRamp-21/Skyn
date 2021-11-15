@@ -47,11 +47,15 @@ The solution is a two step process, inferring the data required from the user fo
 
 `/` - [ImageInput](https://github.com/Randon-Myntra-HackerRamp-21/CV-skin-care-recommendation/blob/main/frontend/src/views/imageInput.jsx) 
 
-This is the initial page, the user is prompted to take a selfie. Once the user grants permission to use their device's camera, a realtime video of their camera (profile : user) runs in 4:3 aspect ratio.
+This is the initial page, the user is prompted to take a selfie. Once the user grants permission to use their device's camera, a realtime video of their camera (profile : user) runs in 4:3 aspect ratio. To ensure that the image is taken with precautions such as _only one face is there in the image_, _proper luminance_ and that the _majority of the image is populated by the user’s face_, **Face recogniton** was implemented using [face-api.js](https://github.com/justadudewhohacks/face-api.js/). The user is given text prompts as directions. When the user takes a selfie, is then redirected to `/form`.  
 
 `/form` - [Form](https://github.com/Randon-Myntra-HackerRamp-21/CV-skin-care-recommendation/blob/main/frontend/src/views/Form.jsx) 
 
+The results of the skin metrics inferred from the user's selfie are presented as prefilled form elements. User can alter these values, along with selecting their other skin concerns from the given list. Once the form is submitted, the page is redirected to `/recs`.
+
 `/recs` - [Recommendations](https://github.com/Randon-Myntra-HackerRamp-21/CV-skin-care-recommendation/blob/main/frontend/src/views/Recommendations.jsx) 
+
+Here the recommended products are presented in the form of cards, with their details. The cards when clicked redirect to their appropriate product page.
 
 ### Backend Routes
 
