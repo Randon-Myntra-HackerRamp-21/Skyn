@@ -100,7 +100,7 @@ Since the dataset that has been used contains data straight from the **Myntra Be
 A good strategy would be to fetch those products whose product attributes (skin tone + concerns) is **similar** to the user's skin metrics and concerns. Mathematically, this similarity can be quantified in the form of **cosine similarity** between product feature vector and user skin attribute vector.
 ![enter image description here](https://neo4j.com/docs/graph-data-science/current/_images/cosine-similarity.png)
 
-**The key idea is:** To find **relevant** skincare products, given the user's skin features, we simply obtain the top **n**  values of **similarity(skin vector, product vector)** and return the products corresponding to those values. 
+**The key idea is:** To find **relevant** skincare products from a particular category, given the user's skin features, we simply obtain the top **n**  values of **similarity(skin vector, product vector)** for the products in dataset belonging to that said category, and return the products corresponding to those values. 
  
 
 ## How to run 
