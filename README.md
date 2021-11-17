@@ -1,5 +1,6 @@
 
 
+
 # Team Name : Randon
 **Project Name** : Skyn 
 
@@ -59,10 +60,14 @@ The results of the skin metrics inferred from the user's selfie are presented as
 Here the recommended products are presented in the form of cards, with their details. The cards when clicked redirect to their appropriate product page.
 
 ### Backend Routes
+**[PUT]**`/upload`
 
-`/upload`
+Accepts a base64 image, converts it into png and feeds that into the pipeline yielding predictions for skin tone, type and acne, and returns these attributes in JSON format. 
 
-`/recommend`
+
+**[PUT]**`/recommend`
+
+Accepts request body containing details about the user's skin type, tone, and concerns, and returns top 5 recommended skincare products from each category in JSON format. 
 
 ## Models
 
@@ -92,7 +97,7 @@ The mean color values obtained from the cluster are then used for classifying th
 
 ### Acne
 
-### Recommendation System
+### Recommender System
 Given the user's skin metrics and concerns, how do we fetch **relevant** skincare products that shall possibly address his/her skin concerns?
 
 Since the dataset that has been used contains data straight from the **Myntra Beauty Section** itself, each product in the dataset is associated with skin tone and one/more skin concerns (acne, blemishes, redness, etc). 
