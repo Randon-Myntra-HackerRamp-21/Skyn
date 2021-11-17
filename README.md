@@ -1,6 +1,7 @@
 
+
 # Team Name : Randon
-**Project Name** : CV-skin-care-recommendation
+**Project Name** : Skyn 
 
 **Chosen Theme** : Beautify
 
@@ -92,6 +93,15 @@ The mean color values obtained from the cluster are then used for classifying th
 ### Acne
 
 ### Recommendation System
+Given the user's skin metrics and concerns, how do we fetch **relevant** skincare products that shall possibly address his/her skin concerns?
+
+Since the dataset that has been used contains data straight from the **Myntra Beauty Section** itself, each product in the dataset is associated with skin tone and one/more skin concerns (acne, blemishes, redness, etc). 
+
+A good strategy would be to fetch those products whose product attributes (skin tone + concerns) is **similar** to the user's skin metrics and concerns. Mathematically, this similarity can be quantified in the form of **cosine similarity** between product feature vector and user skin attribute vector.
+![enter image description here](https://neo4j.com/docs/graph-data-science/current/_images/cosine-similarity.png)
+
+**The key idea is:** To find **relevant** skincare products, given the user's skin features, we simply obtain the top **n**  values of **similarity(skin vector, product vector)** and return the products corresponding to those values. 
+ 
 
 ## How to run 
 Clone this repo, head to the root directory and create a [virtual env](https://www.geeksforgeeks.org/python-virtual-environment/).
