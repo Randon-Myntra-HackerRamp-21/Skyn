@@ -9,8 +9,14 @@
 **Myntra HackerRamp: Campus Edition 2021**
 
 
-## Tagline
-A virtual **skincare advisor** that uses **Machine Learning** to analyse user's selfie and offer personalised products **recommendation** based on the skin metrics inferred.
+## Description
+<!-- A virtual **skincare advisor** that uses **Machine Learning** to analyse user's selfie and offer personalised products **recommendation** based on the skin metrics inferred. -->
+_An application that recommends personalised skincare and makeup products based on the skin metrics inferred from user’s selfie,
+using Computer Vision algorithms._ **Image processing and CNN models** were utilized in the extraction of Skin Tone, Skin Type and
+Acne concern level. With these data points, products with high **cosine-similarity** were recommended in the order of their relevance.
+The web application was written in React-Flask.
+
+[Read more...](https://docs.google.com/presentation/d/1vVo3oRQ1KYGFHyV3YhPADTzodDOFcXKmd5sFNfemASo/edit?usp=sharing)
 
 ## Team Members
 [Sri Sylamsh Amrutakavi](https://github.com/Sylamsh) 
@@ -21,31 +27,9 @@ A virtual **skincare advisor** that uses **Machine Learning** to analyse user's 
 
 [Mondeep Prakash](https://github.com/legitmxn)
 
-## Problem Statement
-How can we provide seamless and personalised skincare shopping experience on an e-commerce platform?
+# Web Application
 
-Most customers are aware of the time consuming in-store experience, accumulated with **uncertainty** of which products suit their skin, chatting with busy store assistants to get more details on products or deals or trying multiple products before buying one.
-
-Everyone's skin is different. Even though the structure of everyone's skin is similar, specific skin metrics - such as skin tone/type, wrinkles, acne severity and so forth - vary largely from person to person. If a moisturiser ‘works’ for someone, it might not for someone else. Also, the use of inappropriate skincare products can exacerbate skin conditions in the worst case.  
-
-**To summarize, before the user shops for skincare products, they need to know their skin, and based on that, purchase products that are appropriate.**
-
-## Our solution
-Our solution is a virtual skincare advisor that uses Machine Learning to analyse user's selfie and offer personalised products recommendation based on the skin metrics inferred.
-
-The solution is a two step process, inferring the data required from the user for recommendation, and the recommendation system itself. Data required from the user are skin metrics like
-
--   skin type (oily, dry, sensitive, combination)
-    
--   skin tone
-    
--   acne, wrinkles, and other concerns
-    
-**Workflow:** The image will be taken with precautions such as proper luminance and that the majority of the image is populated by the user’s face. Then, skin metrics are extracted from the image provided by the user, using multiple ML and DL models. With those data points, the recommendation system will provide us the skin products that is most efficient to those skin data in the order of relevance.
-
-## Web Application
-
-### Frontend Routes
+## Frontend Routes
 
 `/` - [ImageInput](https://github.com/Randon-Myntra-HackerRamp-21/CV-skin-care-recommendation/blob/main/frontend/src/views/imageInput.jsx) 
 
@@ -59,7 +43,7 @@ The results of the skin metrics inferred from the user's selfie are presented as
 
 Here the recommended products are presented in the form of cards, with their details. The cards when clicked redirect to their appropriate product page.
 
-### Backend Routes
+## Backend Routes
 **[PUT]**`/upload`
 
 Accepts a base64 image, converts it into png and feeds that into the pipeline yielding predictions for skin tone, type and acne, and returns these attributes in JSON format. 
@@ -69,9 +53,9 @@ Accepts a base64 image, converts it into png and feeds that into the pipeline yi
 
 Accepts request body containing details about the user's skin type, tone, and concerns, and returns top 5 recommended skincare products from each category in JSON format. 
 
-## Models
+# Models
 
-### Skin Tone
+## Skin Tone
 Obtaining skin tone consists of :
 - Detecting and extracting skin pixels
 - Classifying those color values into the appropriate skin tone class
@@ -93,11 +77,15 @@ Image pixels are clustered into three clusters: **background, foreground and ski
 
 The mean color values obtained from the cluster are then used for classifying the tone into [Fitzpatrick scale](https://en.wikipedia.org/wiki/Fitzpatrick_scale) using a **KNN model**. The model was trained using the [color values dataset](https://github.com/Randon-Myntra-HackerRamp-21/CV-skin-care-recommendation/blob/main/ML/Skin_metrics/Skin_tone/public/skin_tone_dataset.csv) gotten from the [image dataset](https://github.com/Randon-Myntra-HackerRamp-21/CV-skin-care-recommendation/tree/main/ML/Skin_metrics/Skin_tone/public/skin%20tone%20values) of [Von Luschan's chromatic scale](https://github.com/Randon-Myntra-HackerRamp-21/CV-skin-care-recommendation/blob/main/ML/Skin_metrics/Skin_tone/public/test%20images/Felix_von_Luschan_Skin_Color_chart.svg.png).
 
-### Skin Type
+## Skin Type
 
-### Acne
+Facial skin type is inferred by analysing the picture with the utilization of Convolutional Neural Network (CNN) which classifies the image into three classes : _Dry, Oily and Normal_. To increase the accuracy of the model, transfer learning (_EfficientNet B0_) is used with **training accuracy 87.10 %** and **validation accuracy 80%**. The main concern we faced here is the amount of quality face images.
 
-### Recommender System
+## Acne concern level
+
+One of the skin metrics, Acne concern level is classified into three classes : _Low, moderate and Severe_. The model structure possess similar architecture to Skin types CNN model with the use of transfer learning which provides us with an **accuracy of approx 68%** over both training and validation image sets. The dataset we used is obtained from Kaggle.
+
+## Recommender System
 Given the user's skin metrics and concerns, how do we fetch **relevant** skincare products that shall possibly address his/her skin concerns?
 
 Since the dataset that has been used contains data straight from the **Myntra Beauty Section** itself, each product in the dataset is associated with skin tone and one/more skin concerns (acne, blemishes, redness, etc). 
@@ -108,7 +96,7 @@ A good strategy would be to fetch those products whose product attributes (skin 
 **The key idea is:** To find **relevant** skincare products from a particular category, given the user's skin features, we simply obtain the top **n**  values of **similarity(skin vector, product vector)** for the products in dataset belonging to that said category, and return the products corresponding to those values. 
  
 
-## How to run 
+# How to run 
 Clone this repo, head to the root directory and create a [virtual env](https://www.geeksforgeeks.org/python-virtual-environment/).
 `$ pip install -r requirements.txt`
 
