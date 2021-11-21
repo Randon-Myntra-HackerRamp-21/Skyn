@@ -80,10 +80,17 @@ The mean color values obtained from the cluster are then used for classifying th
 ## Skin Type
 
 Facial skin type is inferred by analysing the picture with the utilization of Convolutional Neural Network (CNN) which classifies the image into three classes : _Dry, Oily and Normal_. To increase the accuracy of the model, transfer learning (_EfficientNet B0_) is used with **training accuracy 87.10 %** and **validation accuracy 80%**. The main concern we faced here is the amount of quality face images.
+![Basic CNN Architecture](https://miro.medium.com/max/1400/1*ciDgQEjViWLnCbmX-EeSrA.gif)
 
 ## Acne concern level
 
 One of the skin metrics, Acne concern level is classified into three classes : _Low, moderate and Severe_. The model structure possess similar architecture to Skin types CNN model with the use of transfer learning which provides us with an **accuracy of approx 68%** over both training and validation image sets. The dataset we used is obtained from Kaggle.
+
+**EfficientNet Architecture** : 
+![EfficientNet](https://1.bp.blogspot.com/-DjZT_TLYZok/XO3BYqpxCJI/AAAAAAAAEKM/BvV53klXaTUuQHCkOXZZGywRMdU9v9T_wCLcBGAs/s640/image2.png)
+
+
+**Link to Dataset** : https://www.kaggle.com/rutviklathiyateksun/acne-grading-classificationdataset
 
 ## Recommender System
 Given the user's skin metrics and concerns, how do we fetch **relevant** skincare products that shall possibly address his/her skin concerns?
